@@ -1,17 +1,52 @@
 'use strict';
 
-// array to store all busmall photos
+var imgEl = document.getElementById('busMallProducts0');
+var imgElTwo = document.getElementById('busMallProducts1');
+var imgElThree = document.getElementById('busMallProducts2');
 
+// array to store all busmall photos
 Product.allProducts = [];
+
 
 // make a constructor to hold busmall objects
 function Product(filepath, name) {
   this.filepath = filepath;
   this.name = name;
+  // this.clickTotal = 0;
   Product.allProducts.push(this);
 }
 
-// Create busmall instances
+var randomImage = function () {
+  return Math.floor(Math.random() * Product.allProducts.length);
+};
+// while 2 !== 1 || 2 !== 3 {
+//   randomly generate new image
+// } while 3 !== 1 || 3 !== 2 {
+//     randomly generate new image
+// }
+// access the image from the DOM
+
+
+function renderImages(){
+
+  var imgEl = document.getElementById('busMallProducts0');
+  var imgElTwo = document.getElementById('busMallProducts1');
+  var imgElThree = document.getElementById('busMallProducts2');
+  var one = randomImage();
+  imgEl.src = Product.allProducts[randomImage].filePath;
+
+  var two = randomImage();
+  while (one === two) {
+    two = randomImage();
+    imgElTwo.src = Product.allProducts[two].filePath;
+
+  }
+  var three = randomImage();
+  while (one === two || two === three || one === three) {
+    three = randomImage();
+    imgElThree.src = Product.allProducts[three].filePath;
+  }
+}
 
 new Product('img/bag.jpg', 'Bag');
 new Product('img/banana.jpg', 'Banana');
@@ -34,21 +69,18 @@ new Product('img/usb.gif', 'USB');
 new Product('img/water-can.jpg', 'Water Can');
 new Product('img/wine-glass.jpg', 'Wine Glass');
 
-// access the image from the DOM
-var imgEl = document.getElementById('busMallProducts');
+
 
 // event listener on the page
 imgEl.addEventListener('click', randomImage);
+imgElTwo.addEventListener('click', randomImage);
+imgElThree.addEventListener('click', randomImage);
 
 // callback function to randomly select and display a photo
 
-function randomImage() {
-  var randomIndex = Math.floor(Math.random() * Product.allProducts.length);
-
-  imgEl.src = Product.allProducts[randomIndex].filepath;
-}
+renderImages();
 
 
-// invoke the callback
 
-randomImage();
+
+
