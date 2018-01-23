@@ -6,12 +6,14 @@ var imgElThree = document.getElementById('busMallProducts2');
 
 // array to store all busmall photos
 Product.allProducts = [];
+var allTheClicks = 0;
 
 
 // make a constructor to hold busmall objects
 function Product(filePath, name) {
   this.filePath = filePath;
   this.name = name;
+  this.totalClicks = 0;
   this.displayTotal = 0;
   Product.allProducts.push(this);
 }
@@ -37,47 +39,48 @@ new Product('img/usb.gif', 'USB');
 new Product('img/water-can.jpg', 'Water Can');
 new Product('img/wine-glass.jpg', 'Wine Glass');
 
-
 var randomImage = function () {
   return Math.floor(Math.random() * Product.allProducts.length);
 };
-// while 2 !== 1 || 2 !== 3 {
-//   randomly generate new image
-// } while 3 !== 1 || 3 !== 2 {
-//     randomly generate new image
-// }
-// access the image from the DOM
 
+renderImages();
 
 function renderImages(){
-  var imgEl = document.getElementById('busMallProducts0');
-  var imgElTwo = document.getElementById('busMallProducts1');
-  var imgElThree = document.getElementById('busMallProducts2');
+  if(allTheClicks > 25) {
+    alert('Thanks for participating.');
+    console.log('CAUTION:User clicked more then 25 times');
+  } else {
+    var imgEl = document.getElementById('busMallProducts0');
+    var imgElTwo = document.getElementById('busMallProducts1');
+    var imgElThree = document.getElementById('busMallProducts2');
+    allTheClicks++;
 
-  var one = randomImage();
-  imgEl.src = Product.allProducts[one].filePath;
-  Product.allProducts[one].displayTotal;
-
-  var two = randomImage();
-  while (one === two) {
-    two = randomImage();
+    var one = randomImage();
+    imgEl.src = Product.allProducts[one].filePath;
+    Product.allProducts[one].displayTotal++;
+    var two = randomImage();
+    while (one === two) {
+      two = randomImage();
+    }
+    imgElTwo.src = Product.allProducts[two].filePath;
+    Product.allProducts[two].displayTotal++;
+    var three = randomImage();
+    while (one === two || two === three || one === three) {
+      three = randomImage();
+    }
+    imgElThree.src = Product.allProducts[three].filePath;
+    Product.allProducts[three].displayTotal++;
   }
-  imgElTwo.src = Product.allProducts[two].filePath;
-  Product.allProducts[two].displayTotal;
-
-  var three = randomImage();
-  while (one === two || two === three || one === three) {
-    three = randomImage();
-  }
-  imgElThree.src = Product.allProducts[three].filePath;
-  Product.allProducts[three].displayTotal;
 }
+
+
 
 imgEl.addEventListener('click', renderImages);
 imgElTwo.addEventListener('click', renderImages);
 imgElThree.addEventListener('click', renderImages);
 
-renderImages();
+
+
 
 
 
