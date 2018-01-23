@@ -3,17 +3,22 @@
 Product.allProducts = [];
 Product.totalClicks = 0;
 Product.lastDisplayed = [];
-var imgEl = document.getElementById('busMallProductsL');
-var imgElTwo = document.getElementById('busMallProductC');
-var imgElThree = document.getElementById('busMallProductsR');
+
+
+var sectionEl = document.getElementById('product-section');
+var ulEl = document.getElementById('results');
+
+var productNames = [];
+var productVotes = [];
 
 // make a constructor to hold busmall objects
-function Product(filePath, name) {
-  this.filePath = filePath;
+function Product(name, filePath) {
   this.name = name;
-  this.clickedOn = 0;
-  this.displayTotal = 0;
+  this.filePath = filePath;
+  this.votes = 0;
+  this.timesDisplayed = 0;
   Product.allProducts.push(this);
+  productNames.push(this.name);
 }
 
 new Product('img/bag.jpg', 'Bag');
@@ -37,43 +42,80 @@ new Product('img/usb.gif', 'USB');
 new Product('img/water-can.jpg', 'Water Can');
 new Product('img/wine-glass.jpg', 'Wine Glass');
 
-var randomImage = function () {
-  return Math.floor(Math.random() * Product.allProducts.length);
-};
+var leftEl = document.getElementById('busMallProductsL');
+var centerEl = document.getElementById('busMallProductsC');
+var rightEl = document.getElementById('busMallProductsR');
 
-renderImages();
+function randomImage() {
+  var randomLeft = Math.floor(Math.random() * Product.allProducts.length);
+  var randomCenter = Math.floor(Math.random() * Product.allProducts.length);
+  var randomRight = Math.floor(Math.random() * Product.allProducts.length);
 
-function renderImages(){
-  if(Product.allTheClicks > 25) {
-    alert('Thanks for participating.');
-    console.log('CAUTION:User clicked more then 25 times');
+  while(randomLeft === randomRight || randomCenter === randomRight || randomCenter === randomLeft || Product.lastDisplayed.includes(randomLeft) || Product.lastDisplayed.includes(randomCenter) || Product.lastDisplayed.includes(randomRight)) {
+
+    console.log('Duplicate was caught');
+    randomLeft = Math.floor(Math.random() * Product.allProducts.length);
+    randomCenter = Math.floor(Math.random() * Product.allProducts.length);
+    randomRight = Math.floor(Math.random() * Product.allProducts.length);
+  }
+
+  //  set the src and alt attributes of the two images
+
+  leftEl.src = Product.allProducts[randomLeft].filepath;
+  leftEl.alt = Product.allProducts[randomLeft].name;
+  centerEl.src = Product.allProducts[randomCenter].filepath;
+  centerEl.alt = Product.allProducts[randomCenter].name;
+  rightEl.src = Product.allProducts[randomRight].filepath;
+  rightEl.alt = Product.allProducts[randomRight].name;
+
+  // incremenet the number of times each image was shown
+
+  Product.allProducts[randomLeft].timesDisplayed += 1;
+  Product.allProducts[randomCenter].timesDisplayed += 1;
+  Product.allProducts[randomRight].timesDisplayed += 1;
+
+  // keep track of three images as the previously displayed
+
+  Product.lastDisplayed[0] = randomLeft;
+  Product.lastDisplayed[1] = randomCenter;
+  Product.lastDisplayed[2] = randomRight;
+}
+
+function handleClick(event) {
+
+  Product.totalClicks++;
+  for(var i in Product.allProducts) {
+    if(event.target.alt === Product.allProducts[i]) {
+      Product.allProducts[i].votes++;
+    }
+  }
+  if(Product.totalClicks > 9) {
+    sectionEl.removeEventListener('click', handleClick);
+    showResults();
+    updateVotes();
   } else {
-    var imgEl = document.getElementById('busMallProductsL');
-    var imgElTwo = document.getElementById('busMallProductsC');
-    var imgElThree = document.getElementById('busMallProductsR');
-    Product.allTheClicks++;
-
-    var one = randomImage();
-    imgEl.src = Product.allProducts[one].filePath;
-    Product.allProducts[one].displayTotal++;
-    var two = randomImage();
-    while (one === two) {
-      two = randomImage();
-    }
-    imgElTwo.src = Product.allProducts[two].filePath;
-    Product.allProducts[two].displayTotal++;
-    var three = randomImage();
-    while (one === two || two === three || one === three) {
-      three = randomImage();
-    }
-    imgElThree.src = Product.allProducts[three].filePath;
-    Product.allProducts[three].displayTotal++;
+    randomImage();
   }
 }
 
-imgEl.addEventListener('click', renderImages);
-imgElTwo.addEventListener('click', renderImages);
-imgElThree.addEventListener('click', renderImages);
+function showResults() {
+  for(var i in Product.allProducts) {
+    var liEl = document.createElement('li');
+    liEl.textContent = Product.allProducts[i].name + ' has ' + Product.allProducts[i].votes + ' votes and was displayed ' + Product.allProducts[i].timesDisplayed + ' times.';
+    ulEl.appendChild(liEl);
+  }
+}
+
+function updateVotes() {
+  for(var i in Product.allProducts) {
+    productVotes[i] = Product.allProducts[i].votes;
+  }
+}
+
+
+sectionEl.addEventListener('click', handleClick);
+
+randomImage();
 
 
 
