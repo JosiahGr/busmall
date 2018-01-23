@@ -8,6 +8,7 @@ Product.lastDisplayed = [];
 var sectionEl = document.getElementById('product-section');
 var ulEl = document.getElementById('results');
 
+var productDisplayed = [];
 var productNames = [];
 var productVotes = [];
 
@@ -19,6 +20,7 @@ function Product(filepath, name) {
   this.timesDisplayed = 0;
   Product.allProducts.push(this);
   productNames.push(this.name);
+  productDisplayed.push(this.timesDisplayed);
 }
 
 new Product('img/bag.jpg', 'Bag');
@@ -89,10 +91,11 @@ function handleClick(event) {
       Product.allProducts[i].votes++;
     }
   }
-  if(Product.totalClicks > 25) {
+  if(Product.totalClicks > 4) {
     sectionEl.removeEventListener('click', handleClick);
     showResults();
     updateVotes();
+    renderChart();
   } else {
     randomImage();
   }
@@ -112,6 +115,38 @@ function updateVotes() {
   }
 }
 
+function renderChart(){
+  var context = document.getElementById('chart-placeholder');
+
+  var chartColors = ['#e6194b', '#3cb44b', '#ffe119', '#0082c8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#d2f53c', '#fabebe', '#008080', '#e6beff', '#aa6e28', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000080', '#000000'];
+
+  var productChart = new Chart(context, {
+    type: 'bar',
+    data: {
+      labels: productNames,
+      datasets: [{
+        label: 'Votes Per Product',
+        data: productVotes,
+        backgroundColor: chartColors,
+        borderWidth: 1
+      }, {
+        label: 'Votes Per Product',
+        data: productVotes,
+        backgroundColor: ['gray'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
 
 sectionEl.addEventListener('click', handleClick);
 
