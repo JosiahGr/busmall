@@ -1,13 +1,9 @@
 'use strict';
 
+var allTheClicks = 0;
 var imgEl = document.getElementById('busMallProducts0');
 var imgElTwo = document.getElementById('busMallProducts1');
 var imgElThree = document.getElementById('busMallProducts2');
-
-// array to store all busmall photos
-Product.allProducts = [];
-var allTheClicks = 0;
-
 
 // make a constructor to hold busmall objects
 function Product(filePath, name) {
@@ -17,6 +13,8 @@ function Product(filePath, name) {
   this.displayTotal = 0;
   Product.allProducts.push(this);
 }
+
+Product.allProducts = [];
 
 new Product('img/bag.jpg', 'Bag');
 new Product('img/banana.jpg', 'Banana');
@@ -72,8 +70,6 @@ function renderImages(){
     Product.allProducts[three].displayTotal++;
   }
 }
-
-
 
 imgEl.addEventListener('click', renderImages);
 imgElTwo.addEventListener('click', renderImages);
