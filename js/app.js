@@ -91,9 +91,10 @@ function handleClick(event) {
       Product.allProducts[i].votes++;
     }
   }
-  if(Product.totalClicks > 4) {
+  if(Product.totalClicks > 24) {
     sectionEl.removeEventListener('click', handleClick);
-    showResults();
+    alert('Thank\'s for participating! Here are the results of your selections.');
+    // showResults();
     updateVotes();
     renderChart();
   } else {
@@ -112,6 +113,7 @@ function showResults() {
 function updateVotes() {
   for(var i in Product.allProducts) {
     productVotes[i] = Product.allProducts[i].votes;
+    productDisplayed[i] = Product.allProducts[i].timesDisplayed;
   }
 }
 
@@ -121,19 +123,18 @@ function renderChart(){
   var chartColors = ['#e6194b', '#3cb44b', '#ffe119', '#0082c8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#d2f53c', '#fabebe', '#008080', '#e6beff', '#aa6e28', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000080', '#000000'];
 
   var productChart = new Chart(context, {
-    type: 'bar',
+    type: 'horizontalBar',
     data: {
       labels: productNames,
       datasets: [{
         label: 'Votes Per Product',
         data: productVotes,
         backgroundColor: chartColors,
-        borderWidth: 1
+        borderWidth: 1,
       }, {
-        label: 'Votes Per Product',
-        data: productVotes,
-        backgroundColor: ['gray'],
-        borderWidth: 1
+        label: 'Times Displayed',
+        data: productDisplayed,
+        borderWidth: 1,
       }]
     },
     options: {
@@ -149,16 +150,4 @@ function renderChart(){
 }
 
 sectionEl.addEventListener('click', handleClick);
-
 randomImage();
-
-
-
-
-
-
-
-
-
-
-
