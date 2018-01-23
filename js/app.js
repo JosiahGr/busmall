@@ -1,20 +1,20 @@
 'use strict';
 
-var allTheClicks = 0;
-var imgEl = document.getElementById('busMallProducts0');
-var imgElTwo = document.getElementById('busMallProducts1');
-var imgElThree = document.getElementById('busMallProducts2');
+Product.allProducts = [];
+Product.totalClicks = 0;
+Product.lastDisplayed = [];
+var imgEl = document.getElementById('busMallProductsL');
+var imgElTwo = document.getElementById('busMallProductC');
+var imgElThree = document.getElementById('busMallProductsR');
 
 // make a constructor to hold busmall objects
 function Product(filePath, name) {
   this.filePath = filePath;
   this.name = name;
-  this.totalClicks = 0;
+  this.clickedOn = 0;
   this.displayTotal = 0;
   Product.allProducts.push(this);
 }
-
-Product.allProducts = [];
 
 new Product('img/bag.jpg', 'Bag');
 new Product('img/banana.jpg', 'Banana');
@@ -44,14 +44,14 @@ var randomImage = function () {
 renderImages();
 
 function renderImages(){
-  if(allTheClicks > 25) {
+  if(Product.allTheClicks > 25) {
     alert('Thanks for participating.');
     console.log('CAUTION:User clicked more then 25 times');
   } else {
-    var imgEl = document.getElementById('busMallProducts0');
-    var imgElTwo = document.getElementById('busMallProducts1');
-    var imgElThree = document.getElementById('busMallProducts2');
-    allTheClicks++;
+    var imgEl = document.getElementById('busMallProductsL');
+    var imgElTwo = document.getElementById('busMallProductsC');
+    var imgElThree = document.getElementById('busMallProductsR');
+    Product.allTheClicks++;
 
     var one = randomImage();
     imgEl.src = Product.allProducts[one].filePath;
