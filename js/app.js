@@ -9,43 +9,11 @@ Product.allProducts = [];
 
 
 // make a constructor to hold busmall objects
-function Product(filepath, name) {
-  this.filepath = filepath;
+function Product(filePath, name) {
+  this.filePath = filePath;
   this.name = name;
   // this.clickTotal = 0;
   Product.allProducts.push(this);
-}
-
-var randomImage = function () {
-  return Math.floor(Math.random() * Product.allProducts.length);
-};
-// while 2 !== 1 || 2 !== 3 {
-//   randomly generate new image
-// } while 3 !== 1 || 3 !== 2 {
-//     randomly generate new image
-// }
-// access the image from the DOM
-
-
-function renderImages(){
-
-  var imgEl = document.getElementById('busMallProducts0');
-  var imgElTwo = document.getElementById('busMallProducts1');
-  var imgElThree = document.getElementById('busMallProducts2');
-  var one = randomImage();
-  imgEl.src = Product.allProducts[randomImage].filePath;
-
-  var two = randomImage();
-  while (one === two) {
-    two = randomImage();
-    imgElTwo.src = Product.allProducts[two].filePath;
-
-  }
-  var three = randomImage();
-  while (one === two || two === three || one === three) {
-    three = randomImage();
-    imgElThree.src = Product.allProducts[three].filePath;
-  }
 }
 
 new Product('img/bag.jpg', 'Bag');
@@ -69,6 +37,40 @@ new Product('img/usb.gif', 'USB');
 new Product('img/water-can.jpg', 'Water Can');
 new Product('img/wine-glass.jpg', 'Wine Glass');
 
+
+
+
+var randomImage = function () {
+  return Math.floor(Math.random() * Product.allProducts.length);
+};
+// while 2 !== 1 || 2 !== 3 {
+//   randomly generate new image
+// } while 3 !== 1 || 3 !== 2 {
+//     randomly generate new image
+// }
+// access the image from the DOM
+
+
+function renderImages(){
+  var imgEl = document.getElementById('busMallProducts0');
+  var imgElTwo = document.getElementById('busMallProducts1');
+  var imgElThree = document.getElementById('busMallProducts2');
+
+  var one = randomImage();
+  imgEl.src = Product.allProducts[one].filePath;
+
+  var two = randomImage();
+  while (one === two) {
+    two = randomImage();
+  }
+  imgElTwo.src = Product.allProducts[two].filePath;
+
+  var three = randomImage();
+  while (one === two || two === three || one === three) {
+    three = randomImage();
+  }
+  imgElThree.src = Product.allProducts[three].filePath;
+}
 
 
 // event listener on the page
