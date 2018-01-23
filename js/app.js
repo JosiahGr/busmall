@@ -12,7 +12,7 @@ Product.allProducts = [];
 function Product(filePath, name) {
   this.filePath = filePath;
   this.name = name;
-  // this.clickTotal = 0;
+  this.displayTotal = 0;
   Product.allProducts.push(this);
 }
 
@@ -38,8 +38,6 @@ new Product('img/water-can.jpg', 'Water Can');
 new Product('img/wine-glass.jpg', 'Wine Glass');
 
 
-
-
 var randomImage = function () {
   return Math.floor(Math.random() * Product.allProducts.length);
 };
@@ -58,29 +56,31 @@ function renderImages(){
 
   var one = randomImage();
   imgEl.src = Product.allProducts[one].filePath;
+  Product.allProducts[one].displayTotal;
 
   var two = randomImage();
   while (one === two) {
     two = randomImage();
   }
   imgElTwo.src = Product.allProducts[two].filePath;
+  Product.allProducts[two].displayTotal;
 
   var three = randomImage();
   while (one === two || two === three || one === three) {
     three = randomImage();
   }
   imgElThree.src = Product.allProducts[three].filePath;
+  Product.allProducts[three].displayTotal;
 }
 
-
-// event listener on the page
-imgEl.addEventListener('click', randomImage);
-imgElTwo.addEventListener('click', randomImage);
-imgElThree.addEventListener('click', randomImage);
-
-// callback function to randomly select and display a photo
+imgEl.addEventListener('click', renderImages);
+imgElTwo.addEventListener('click', renderImages);
+imgElThree.addEventListener('click', renderImages);
 
 renderImages();
+
+
+
 
 
 
