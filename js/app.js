@@ -12,9 +12,9 @@ var productNames = [];
 var productVotes = [];
 
 // make a constructor to hold busmall objects
-function Product(name, filePath) {
+function Product(filepath, name) {
   this.name = name;
-  this.filePath = filePath;
+  this.filepath = filepath;
   this.votes = 0;
   this.timesDisplayed = 0;
   Product.allProducts.push(this);
@@ -82,14 +82,14 @@ function randomImage() {
 }
 
 function handleClick(event) {
-
   Product.totalClicks++;
+
   for(var i in Product.allProducts) {
-    if(event.target.alt === Product.allProducts[i]) {
+    if(event.target.alt === Product.allProducts[i].name) {
       Product.allProducts[i].votes++;
     }
   }
-  if(Product.totalClicks > 9) {
+  if(Product.totalClicks > 25) {
     sectionEl.removeEventListener('click', handleClick);
     showResults();
     updateVotes();
