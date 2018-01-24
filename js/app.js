@@ -78,6 +78,7 @@ function randomImage() {
 
 function handleClick(event) {
   Product.totalClicks++;
+ 
 
   for(var i in Product.allProducts) {
     if(event.target.alt === Product.allProducts[i].name) {
