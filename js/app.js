@@ -1,13 +1,9 @@
 'use strict';
-
 Product.allProducts = [];
 Product.totalClicks = 0;
 Product.lastDisplayed = [];
-
-
 var sectionEl = document.getElementById('product-section');
 var ulEl = document.getElementById('results');
-
 var productNames = [];
 var productVotes = [];
 
@@ -60,7 +56,6 @@ function randomImage() {
   }
 
   //  set the src and alt attributes of the two images
-
   leftEl.src = Product.allProducts[randomLeft].filepath;
   leftEl.alt = Product.allProducts[randomLeft].name;
   centerEl.src = Product.allProducts[randomCenter].filepath;
@@ -69,20 +64,17 @@ function randomImage() {
   rightEl.alt = Product.allProducts[randomRight].name;
 
   // incremenet the number of times each image was shown
-
   Product.allProducts[randomLeft].timesDisplayed += 1;
   Product.allProducts[randomCenter].timesDisplayed += 1;
   Product.allProducts[randomRight].timesDisplayed += 1;
 
   // keep track of three images as the previously displayed
-
   Product.lastDisplayed[0] = randomLeft;
   Product.lastDisplayed[1] = randomCenter;
   Product.lastDisplayed[2] = randomRight;
 }
 
 function handleClick(event) {
-
   Product.totalClicks++;
   for(var i in Product.allProducts) {
     if(event.target.alt === Product.allProducts[i]) {
@@ -112,18 +104,5 @@ function updateVotes() {
   }
 }
 
-
 sectionEl.addEventListener('click', handleClick);
-
 randomImage();
-
-
-
-
-
-
-
-
-
-
-
