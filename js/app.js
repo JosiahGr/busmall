@@ -1,20 +1,26 @@
 'use strict';
+
 Product.allProducts = [];
 Product.totalClicks = 0;
 Product.lastDisplayed = [];
+
+
 var sectionEl = document.getElementById('product-section');
 var ulEl = document.getElementById('results');
+
+var productDisplayed = [];
 var productNames = [];
 var productVotes = [];
 
 // make a constructor to hold busmall objects
-function Product(name, filePath) {
+function Product(filepath, name) {
   this.name = name;
-  this.filePath = filePath;
+  this.filepath = filepath;
   this.votes = 0;
   this.timesDisplayed = 0;
   Product.allProducts.push(this);
   productNames.push(this.name);
+  productDisplayed.push(this.timesDisplayed);
 }
 
 new Product('img/bag.jpg', 'Bag');
@@ -56,6 +62,7 @@ function randomImage() {
   }
 
   //  set the src and alt attributes of the two images
+
   leftEl.src = Product.allProducts[randomLeft].filepath;
   leftEl.alt = Product.allProducts[randomLeft].name;
   centerEl.src = Product.allProducts[randomCenter].filepath;
@@ -64,11 +71,13 @@ function randomImage() {
   rightEl.alt = Product.allProducts[randomRight].name;
 
   // incremenet the number of times each image was shown
+
   Product.allProducts[randomLeft].timesDisplayed += 1;
   Product.allProducts[randomCenter].timesDisplayed += 1;
   Product.allProducts[randomRight].timesDisplayed += 1;
 
   // keep track of three images as the previously displayed
+
   Product.lastDisplayed[0] = randomLeft;
   Product.lastDisplayed[1] = randomCenter;
   Product.lastDisplayed[2] = randomRight;
@@ -76,15 +85,18 @@ function randomImage() {
 
 function handleClick(event) {
   Product.totalClicks++;
+
   for(var i in Product.allProducts) {
-    if(event.target.alt === Product.allProducts[i]) {
+    if(event.target.alt === Product.allProducts[i].name) {
       Product.allProducts[i].votes++;
     }
   }
-  if(Product.totalClicks > 9) {
+  if(Product.totalClicks > 24) {
     sectionEl.removeEventListener('click', handleClick);
+    alert('Thank\'s for participating! Here are the results of your selections.');
     showResults();
     updateVotes();
+    renderChart();
   } else {
     randomImage();
   }
@@ -101,7 +113,40 @@ function showResults() {
 function updateVotes() {
   for(var i in Product.allProducts) {
     productVotes[i] = Product.allProducts[i].votes;
+    productDisplayed[i] = Product.allProducts[i].timesDisplayed;
   }
+}
+
+function renderChart(){
+  var context = document.getElementById('chart-placeholder');
+
+  var chartColors = ['#e6194b', '#3cb44b', '#ffe119', '#0082c8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#d2f53c', '#fabebe', '#008080', '#e6beff', '#aa6e28', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000080', '#000000'];
+
+  var productChart = new Chart(context, {
+    type: 'horizontalBar',
+    data: {
+      labels: productNames,
+      datasets: [{
+        label: 'Votes Per Product',
+        data: productVotes,
+        backgroundColor: chartColors,
+        borderWidth: 1,
+      }, {
+        label: 'Times Displayed',
+        data: productDisplayed,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
 }
 
 sectionEl.addEventListener('click', handleClick);
