@@ -78,18 +78,18 @@ function randomImage() {
 
 function handleClick(event) {
   Product.totalClicks++;
- 
-
   for(var i in Product.allProducts) {
     if(event.target.alt === Product.allProducts[i].name) {
       Product.allProducts[i].votes++;
     }
   }
+
   if(Product.totalClicks > 24) {
     sectionEl.removeEventListener('click', handleClick);
     alert('Thank\'s for participating! Here are the results of your selections.');
     showResults();
     updateVotes();
+    saveLocally();
     renderChart();
   } else {
     randomImage();
@@ -111,18 +111,34 @@ function updateVotes() {
   }
 }
 
+
+function saveLocally() {
+  if (localStorage.total) {
+    localStorage.setItem('votes', JSON.stringify(Product.totalClicks));
+
+    var parseVotes = JSON.parse(localStorage.votes);
+    var parseTotal = JSON.parse(localStorage.total);
+
+    parseTotal = parseTotal + parseVotes;
+
+    localStorage.setItem('total', JSON.stringify(parseTotal));
+
+  } else {
+    localStorage.setItem('total', JSON.stringify(Product.totalClicks));
+  }
+}
+
+
 function renderChart(){
   var context = document.getElementById('chart-placeholder');
-
   var chartColors = ['#e6194b', '#3cb44b', '#ffe119', '#0082c8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#d2f53c', '#fabebe', '#008080', '#e6beff', '#aa6e28', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000080', '#000000'];
-
   var productChart = new Chart(context, {
     type: 'horizontalBar',
     data: {
       labels: productNames,
       datasets: [{
         label: 'Votes Per Product',
-        data: productVotes,
+        data: localStorage.getItem(localStorage.total),
         backgroundColor: chartColors,
         borderWidth: 1,
       }, {
