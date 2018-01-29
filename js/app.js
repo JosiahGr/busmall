@@ -7,6 +7,18 @@ var ulEl = document.getElementById('results');
 var productDisplayed = [];
 var productNames = [];
 var productVotes = [];
+var userName;
+
+function getUserName() {
+  if(localStorage.userName) {
+    alert('Welcome back ' + localStorage.userName + '!');
+    userName = localStorage.userName;
+  } else {
+    userName = prompt('Thank you for participating in our study! Please enter your name');
+    console.log(userName);
+    alert('Thanks ' + userName + ' for participating. Please click on your favorite image out of the selection.');
+  }
+}
 
 // make a constructor to hold busmall objects
 function Product(filepath, name) {
@@ -116,6 +128,7 @@ function saveLocally() {
   if (localStorage.total) {
     localStorage.setItem('votes', JSON.stringify(Product.totalClicks));
 
+    localStorage.userName = userName;
     var parseVotes = JSON.parse(localStorage.votes);
     var parseTotal = JSON.parse(localStorage.total);
 
@@ -133,12 +146,12 @@ function renderChart(){
   var context = document.getElementById('chart-placeholder');
   var chartColors = ['#e6194b', '#3cb44b', '#ffe119', '#0082c8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#d2f53c', '#fabebe', '#008080', '#e6beff', '#aa6e28', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000080', '#000000'];
   var productChart = new Chart(context, {
-    type: 'horizontalBar',
+    type: 'bar',
     data: {
       labels: productNames,
       datasets: [{
         label: 'Votes Per Product',
-        data: localStorage.getItem(localStorage.total),
+        data: productVotes,
         backgroundColor: chartColors,
         borderWidth: 1,
       }, {
@@ -159,5 +172,6 @@ function renderChart(){
   });
 }
 
+getUserName();
 sectionEl.addEventListener('click', handleClick);
 randomImage();
